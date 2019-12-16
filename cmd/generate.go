@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/spf13/cobra"
 )
@@ -17,6 +18,11 @@ var generateCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		privKeyBytes := crypto.FromECDSA(privKey)
+		privKeyHex := hexutil.Encode(privKeyBytes)
+		fmt.Println("privkey", privKeyHex)
+
 		pubKey := privKey.Public()
 		pubKeyECDSA, ok := pubKey.(*ecdsa.PublicKey)
 		if !ok {
