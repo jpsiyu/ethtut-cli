@@ -10,7 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// clientCmd represents the client command
 var clientCmd = &cobra.Command{
 	Use:   "client",
 	Short: "client info",
@@ -23,7 +22,7 @@ var clientCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println("chain id", chainID)
+		fmt.Println("client is visiting blockchain which chain id is", chainID)
 	},
 }
 
