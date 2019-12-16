@@ -12,7 +12,7 @@ import (
 
 var generateCmd = &cobra.Command{
 	Use:   "generate",
-	Short: "A brief description of your command",
+	Short: "generate account",
 	Run: func(cmd *cobra.Command, args []string) {
 		privKey, err := crypto.GenerateKey()
 		if err != nil {
