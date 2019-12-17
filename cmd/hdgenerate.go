@@ -10,9 +10,9 @@ import (
 
 var bits int
 
-var mnemonicCmd = &cobra.Command{
-	Use:   "mnemonic",
-	Short: "A brief description of your command",
+var hdgenerateCmd = &cobra.Command{
+	Use:   "generate",
+	Short: "generate mnemonic",
 	Run: func(cmd *cobra.Command, args []string) {
 		mnemonic, err := hdwallet.NewMnemonic(bits)
 		if err != nil {
@@ -23,7 +23,7 @@ var mnemonicCmd = &cobra.Command{
 }
 
 func init() {
-	mnemonicCmd.Flags().IntVarP(&bits, "bits", "b", 256, "set mnemonic's length")
+	hdgenerateCmd.Flags().IntVarP(&bits, "bits", "b", 256, "set mnemonic's length")
 
-	hdwalletCmd.AddCommand(mnemonicCmd)
+	hdwalletCmd.AddCommand(hdgenerateCmd)
 }
