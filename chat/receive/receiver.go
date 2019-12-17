@@ -1,11 +1,13 @@
 package receive
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"github.com/jpsiyu/ethtut-cli/chat/common"
+	"log"
+	"os"
 
 	"github.com/ethereum/go-ethereum/whisper/shhclient"
 	"github.com/ethereum/go-ethereum/whisper/whisperv6"
@@ -43,6 +45,15 @@ func (receiver *Receiver) Run() {
 		case message := <-messages:
 			var userMsg common.UserMsg
 			json.Unmarshal(message.Payload, &userMsg)
+			reader := bufio.NewReader(nil)
+			/*
+				content, err := reader.ReadString('\n')
+				if err != nil {
+					log.Fatal(err)
+				}
+				fmt.Println("buffer data", content)
+			*/
+			reader.Reset(os.Stdin)
 			if userMsg.User.ID != receiver.user.ID {
 				fmt.Printf("(%d)%s: %s\n", userMsg.User.ID, userMsg.User.Name, userMsg.Msg)
 			}

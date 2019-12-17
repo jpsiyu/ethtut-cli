@@ -20,20 +20,20 @@ type UserMsg struct {
 }
 
 func GenKey() string {
-	return "4eb750dd525042f2511756aa3e108e6bd26dc7d02df77f04873879278cf33461"
+	return "cc6587d8c5a8925158abffedd30b8df663c1a1eec1b9b4f3157f743c5970e5dd"
 }
 
-func RandomKey() (error, string) {
+func RandomKey() (string, error) {
 	client, err := shhclient.Dial(conf.ShhUrl)
 	if err != nil {
-		return err, ""
+		return "", err
 	}
 
 	keyID, err := client.NewKeyPair(context.Background())
 	if err != nil {
-		return err, ""
+		return "", err
 	}
-	return nil, keyID
+	return keyID, nil
 }
 
 var names []string = []string{
