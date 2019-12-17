@@ -13,7 +13,12 @@ import (
 )
 
 func Run() {
-	keyID := common.GenKey()
+	app := tview.NewApplication()
+	keyID, err := common.GenSymKey()
+	if err != nil {
+		log.Fatal((err))
+	}
+
 	client, err := shhclient.Dial(conf.ShhUrl)
 	if err != nil {
 		log.Fatal((err))
@@ -26,19 +31,19 @@ func Run() {
 	input.SetFieldWidth(300)
 	input.SetFieldBackgroundColor(tcell.ColorBlack)
 	input.SetFieldTextColor(tcell.ColorWhite)
-	input.SetDoneFunc(func(key tcell.Key) {
-		text := input.GetText()
-		if text != "" {
-			sender.Say(text)
-			input.SetText("")
-		}
-	})
 
 	table := tview.NewTable()
+
+	input.SetFinishedFunc(func(key tcell.Key) {
+		text := input.GetText()
+		sender.Say(text)
+		input.SetText("")
+	})
+
 	var handler = func(text string) {
-		input.SetText("add cell")
 		count := table.GetRowCount()
 		table.SetCell(count, 0, tview.NewTableCell(text))
+		app.Draw()
 	}
 
 	grid := tview.NewGrid()
@@ -50,7 +55,6 @@ func Run() {
 	receiver := receive.NewReceiver(&user, client, keyID, handler)
 	go receiver.Run()
 
-	app := tview.NewApplication()
 	app.SetRoot(grid, true)
 	app.SetFocus(input)
 	err = app.Run()

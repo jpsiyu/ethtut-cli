@@ -25,7 +25,7 @@ func GenKey() string {
 		fmt.Println(keyID)
 		return keyID
 	*/
-	return "050376991e0d2a08b9e486b5989f032fdda0c92971accb24677dcec20c4f5509"
+	return "388a946659e7899f5772708a90585b9022f074e0067298f73bbc75231bb2c9f8"
 }
 
 func RandomKey() (string, error) {
@@ -39,6 +39,19 @@ func RandomKey() (string, error) {
 		return "", err
 	}
 	return keyID, nil
+}
+
+func GenSymKey() (string, error) {
+	client, err := shhclient.Dial(conf.ShhUrl)
+	if err != nil {
+		return "", err
+	}
+	keyID, err := client.GenerateSymmetricKeyFromPassword(context.Background(), "Helo")
+	return keyID, err
+}
+
+func Topic() []byte {
+	return []byte("1234")
 }
 
 var names []string = []string{

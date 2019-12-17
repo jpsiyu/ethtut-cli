@@ -30,8 +30,10 @@ func NewReceiver(user *common.User, client *shhclient.Client, keyID string, hand
 
 func (receiver *Receiver) Run() {
 	messages := make(chan *whisperv6.Message)
+	topic := whisperv6.BytesToTopic(common.Topic())
 	criteria := whisperv6.Criteria{
-		PrivateKeyID: receiver.keyID,
+		SymKeyID: receiver.keyID,
+		Topics:   []whisperv6.TopicType{topic},
 	}
 
 	sub, err := receiver.client.SubscribeMessages(context.Background(), criteria, messages)
