@@ -19,26 +19,17 @@ type UserMsg struct {
 	Msg  string `json:"msg"`
 }
 
-func GenKey() string {
-	/*
-		keyID, _ := RandomKey()
-		fmt.Println(keyID)
-		return keyID
-	*/
-	return "388a946659e7899f5772708a90585b9022f074e0067298f73bbc75231bb2c9f8"
-}
-
-func RandomKey() (string, error) {
+func RandomKeyPair() (string, error) {
 	client, err := shhclient.Dial(conf.ShhUrl)
 	if err != nil {
 		return "", err
 	}
 
-	keyID, err := client.NewKeyPair(context.Background())
+	keypair, err := client.NewKeyPair(context.Background())
 	if err != nil {
 		return "", err
 	}
-	return keyID, nil
+	return keypair, nil
 }
 
 func GenSymKey() (string, error) {

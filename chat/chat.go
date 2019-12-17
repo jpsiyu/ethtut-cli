@@ -14,7 +14,7 @@ import (
 
 func Run() {
 	app := tview.NewApplication()
-	keyID, err := common.GenSymKey()
+	symKeyID, err := common.GenSymKey()
 	if err != nil {
 		log.Fatal((err))
 	}
@@ -24,7 +24,7 @@ func Run() {
 		log.Fatal((err))
 	}
 	user := common.RandomUser()
-	sender := send.NewSender(&user, client, keyID)
+	sender := send.NewSender(&user, client, symKeyID)
 
 	input := tview.NewInputField()
 	input.SetLabel("Input message: ")
@@ -52,7 +52,7 @@ func Run() {
 	grid.AddItem(table, 0, 0, 1, 1, 0, 0, false)
 	grid.AddItem(input, 1, 0, 1, 1, 0, 0, false)
 
-	receiver := receive.NewReceiver(&user, client, keyID, handler)
+	receiver := receive.NewReceiver(&user, client, symKeyID, handler)
 	go receiver.Run()
 
 	app.SetRoot(grid, true)

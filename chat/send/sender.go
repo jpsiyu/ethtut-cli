@@ -11,16 +11,19 @@ import (
 )
 
 type Sender struct {
-	client *shhclient.Client
-	keyID  string
-	user   *common.User
+	client   *shhclient.Client
+	symKeyID string
+	user     *common.User
+	keypair  string
 }
 
-func NewSender(user *common.User, client *shhclient.Client, keyID string) *Sender {
+func NewSender(user *common.User, client *shhclient.Client, symKeyID string) *Sender {
+	keypair, _ := common.RandomKeyPair()
 	return &Sender{
-		client: client,
-		keyID:  keyID,
-		user:   user,
+		client:   client,
+		symKeyID: symKeyID,
+		user:     user,
+		keypair:  keypair,
 	}
 }
 
@@ -32,12 +35,13 @@ func (sender *Sender) Say(msg string) {
 	bytes, _ := json.Marshal(&userMsg)
 
 	message := whisperv6.NewMessage{
-		SymKeyID:  sender.keyID,
+		SymKeyID:  sender.symKeyID,
 		Payload:   bytes,
 		TTL:       60,
 		PowTime:   2,
 		PowTarget: 2.5,
 		Topic:     whisperv6.BytesToTopic(common.Topic()),
+		Sig:       sender.keypair,
 	}
 
 	_, err := sender.client.Post(context.Background(), message)

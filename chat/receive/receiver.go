@@ -13,18 +13,18 @@ import (
 )
 
 type Receiver struct {
-	client  *shhclient.Client
-	keyID   string
-	user    *common.User
-	handler func(string)
+	client   *shhclient.Client
+	symKeyID string
+	user     *common.User
+	handler  func(string)
 }
 
-func NewReceiver(user *common.User, client *shhclient.Client, keyID string, handler func(string)) *Receiver {
+func NewReceiver(user *common.User, client *shhclient.Client, symKeyID string, handler func(string)) *Receiver {
 	return &Receiver{
-		client:  client,
-		keyID:   keyID,
-		user:    user,
-		handler: handler,
+		client:   client,
+		symKeyID: symKeyID,
+		user:     user,
+		handler:  handler,
 	}
 }
 
@@ -32,7 +32,7 @@ func (receiver *Receiver) Run() {
 	messages := make(chan *whisperv6.Message)
 	topic := whisperv6.BytesToTopic(common.Topic())
 	criteria := whisperv6.Criteria{
-		SymKeyID: receiver.keyID,
+		SymKeyID: receiver.symKeyID,
 		Topics:   []whisperv6.TopicType{topic},
 	}
 
