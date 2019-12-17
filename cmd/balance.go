@@ -36,7 +36,7 @@ var balanceCmd = &cobra.Command{
 		} else {
 			fbalance := new(big.Float).SetInt(balance)
 			ethValue := fbalance.Quo(fbalance, big.NewFloat(math.Pow10(18)))
-			fmt.Println("balance:", ethValue, "eth")
+			fmt.Println("balance:", ethValue.String(), "eth")
 		}
 
 	},
