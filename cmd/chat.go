@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/jpsiyu/ethtut-cli/chat"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +10,7 @@ var chatCmd = &cobra.Command{
 	Use:   "chat",
 	Short: "whisper chat",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("chat called")
+		chat.Run()
 	},
 }
 

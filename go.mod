@@ -3,6 +3,7 @@ module github.com/jpsiyu/ethtut-cli
 go 1.13
 
 require (
+	github.com/buger/goterm v0.0.0-20181115115552-c206103e1f37
 	github.com/ethereum/go-ethereum v1.9.9
 	github.com/miguelmota/go-ethereum-hdwallet v0.0.0-20191015012459-abf3d7f7f00c
 	github.com/mitchellh/go-homedir v1.1.0
