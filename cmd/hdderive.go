@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/ethereum/go-ethereum/accounts"
@@ -25,11 +26,11 @@ var hdderiveCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		account, err := wallet.Derive(derivePath, false)
+		account, err := wallet.Derive(derivePath, true)
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Println(account.Address.Hex())
+		fmt.Println(account.Address.Hex())
 	},
 }
 
