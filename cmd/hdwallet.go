@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/ethereum/go-ethereum/accounts"
 	hdwallet "github.com/miguelmota/go-ethereum-hdwallet"
 	"github.com/spf13/cobra"
 )
@@ -11,6 +12,7 @@ import (
 var (
 	hdBits     int
 	hdMnemonic string
+	hdPath     string
 )
 
 var hdwalletCmd = &cobra.Command{
@@ -49,6 +51,26 @@ var hdstatusCmd = &cobra.Command{
 	},
 }
 
+var hdderiveCmd = &cobra.Command{
+	Use:   "derive",
+	Short: "derive account",
+	Run: func(cmd *cobra.Command, args []string) {
+		wallet, err := hdwallet.NewFromMnemonic(hdMnemonic)
+		if err != nil {
+			log.Fatal(err)
+		}
+		derivePath, err := accounts.ParseDerivationPath(hdPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		account, err := wallet.Derive(derivePath, true)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(account.Address.Hex())
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(hdwalletCmd)
 
@@ -58,5 +80,11 @@ func init() {
 	hdwalletCmd.AddCommand(hdstatusCmd)
 	hdstatusCmd.Flags().StringVarP(&hdMnemonic, "mnemonic", "m", "", "input mnemonic")
 	hdstatusCmd.MarkFlagRequired("mnemonic")
+
+	hdwalletCmd.AddCommand(hdderiveCmd)
+	hdderiveCmd.Flags().StringVarP(&hdMnemonic, "mnemonic", "m", "", "input mnemonic")
+	hdderiveCmd.MarkFlagRequired("mnemonic")
+	hdderiveCmd.Flags().StringVarP(&hdPath, "path", "p", "", "input derive path")
+	hdderiveCmd.MarkFlagRequired("path")
 
 }
