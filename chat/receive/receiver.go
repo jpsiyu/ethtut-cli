@@ -1,29 +1,30 @@
 package receive
 
 import (
-	"bufio"
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/jpsiyu/ethtut-cli/chat/common"
 	"log"
-	"os"
+
+	"github.com/jpsiyu/ethtut-cli/chat/common"
 
 	"github.com/ethereum/go-ethereum/whisper/shhclient"
 	"github.com/ethereum/go-ethereum/whisper/whisperv6"
 )
 
 type Receiver struct {
-	client *shhclient.Client
-	keyID  string
-	user   *common.User
+	client  *shhclient.Client
+	keyID   string
+	user    *common.User
+	handler func(string)
 }
 
-func NewReceiver(user *common.User, client *shhclient.Client, keyID string) *Receiver {
+func NewReceiver(user *common.User, client *shhclient.Client, keyID string, handler func(string)) *Receiver {
 	return &Receiver{
-		client: client,
-		keyID:  keyID,
-		user:   user,
+		client:  client,
+		keyID:   keyID,
+		user:    user,
+		handler: handler,
 	}
 }
 
@@ -45,18 +46,8 @@ func (receiver *Receiver) Run() {
 		case message := <-messages:
 			var userMsg common.UserMsg
 			json.Unmarshal(message.Payload, &userMsg)
-			reader := bufio.NewReader(nil)
-			/*
-				content, err := reader.ReadString('\n')
-				if err != nil {
-					log.Fatal(err)
-				}
-				fmt.Println("buffer data", content)
-			*/
-			reader.Reset(os.Stdin)
-			if userMsg.User.ID != receiver.user.ID {
-				fmt.Printf("(%d)%s: %s\n", userMsg.User.ID, userMsg.User.Name, userMsg.Msg)
-			}
+			formatStr := fmt.Sprintf("(%d)%s: %s\n", userMsg.User.ID, userMsg.User.Name, userMsg.Msg)
+			receiver.handler(formatStr)
 		}
 	}
 }

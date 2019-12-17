@@ -20,7 +20,12 @@ type UserMsg struct {
 }
 
 func GenKey() string {
-	return "cc6587d8c5a8925158abffedd30b8df663c1a1eec1b9b4f3157f743c5970e5dd"
+	/*
+		keyID, _ := RandomKey()
+		fmt.Println(keyID)
+		return keyID
+	*/
+	return "050376991e0d2a08b9e486b5989f032fdda0c92971accb24677dcec20c4f5509"
 }
 
 func RandomKey() (string, error) {
