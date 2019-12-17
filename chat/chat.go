@@ -13,7 +13,26 @@ import (
 )
 
 func Run() {
+	// user
+	user := common.RandomUser()
+
+	// view
 	app := tview.NewApplication()
+	input := tview.NewInputField()
+	input.SetLabel(user.Name + ": ")
+	input.SetFieldWidth(300)
+	input.SetFieldBackgroundColor(tcell.ColorBlack)
+	input.SetFieldTextColor(tcell.ColorWhite)
+	table := tview.NewTable()
+	grid := tview.NewGrid()
+	grid.SetRows(0, 5)
+	grid.SetBorders(true)
+	grid.AddItem(table, 0, 0, 1, 1, 0, 0, false)
+	grid.AddItem(input, 1, 0, 1, 1, 0, 0, false)
+	app.SetRoot(grid, true)
+	app.SetFocus(input)
+
+	// shh client
 	symKeyID, err := common.GenSymKey()
 	if err != nil {
 		log.Fatal((err))
@@ -23,40 +42,23 @@ func Run() {
 	if err != nil {
 		log.Fatal((err))
 	}
-	user := common.RandomUser()
 	sender := send.NewSender(&user, client, symKeyID)
-
-	input := tview.NewInputField()
-	input.SetLabel("Input message: ")
-	input.SetFieldWidth(300)
-	input.SetFieldBackgroundColor(tcell.ColorBlack)
-	input.SetFieldTextColor(tcell.ColorWhite)
-
-	table := tview.NewTable()
-
-	input.SetFinishedFunc(func(key tcell.Key) {
-		text := input.GetText()
-		sender.Say(text)
-		input.SetText("")
-	})
 
 	var handler = func(text string) {
 		count := table.GetRowCount()
 		table.SetCell(count, 0, tview.NewTableCell(text))
 		app.Draw()
 	}
-
-	grid := tview.NewGrid()
-	grid.SetRows(0, 5)
-	grid.SetBorders(true)
-	grid.AddItem(table, 0, 0, 1, 1, 0, 0, false)
-	grid.AddItem(input, 1, 0, 1, 1, 0, 0, false)
-
 	receiver := receive.NewReceiver(&user, client, symKeyID, handler)
 	go receiver.Run()
 
-	app.SetRoot(grid, true)
-	app.SetFocus(input)
+	// bind view and logic
+	input.SetFinishedFunc(func(key tcell.Key) {
+		text := input.GetText()
+		sender.Say(text)
+		input.SetText("")
+	})
+
 	err = app.Run()
 	if err != nil {
 		log.Fatal(err)

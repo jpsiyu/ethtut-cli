@@ -48,7 +48,7 @@ func (receiver *Receiver) Run() {
 		case message := <-messages:
 			var userMsg common.UserMsg
 			json.Unmarshal(message.Payload, &userMsg)
-			formatStr := fmt.Sprintf("(%d)%s: %s\n", userMsg.User.ID, userMsg.User.Name, userMsg.Msg)
+			formatStr := fmt.Sprintf("%s@%d: %s\n", userMsg.User.Name, userMsg.User.ID, userMsg.Msg)
 			receiver.handler(formatStr)
 		}
 	}
