@@ -27,10 +27,23 @@ var toWeiCmd = &cobra.Command{
 	},
 }
 
+var toEthCmd = &cobra.Command{
+	Use:   "toeth",
+	Short: "convert wei to eth",
+	Run: func(cmd *cobra.Command, args []string) {
+		eth := util.ToDecimal(utAmount, 18)
+		fmt.Println("eth:", eth)
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(utilCmd)
 
 	utilCmd.AddCommand(toWeiCmd)
 	toWeiCmd.Flags().StringVarP(&utAmount, "amount", "a", "", "amount")
 	toWeiCmd.MarkFlagRequired("amount")
+
+	utilCmd.AddCommand(toEthCmd)
+	toEthCmd.Flags().StringVarP(&utAmount, "amount", "a", "", "amount")
+	toEthCmd.MarkFlagRequired("amount")
 }
