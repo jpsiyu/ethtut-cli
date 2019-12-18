@@ -9,6 +9,7 @@ require (
 	github.com/miguelmota/go-ethereum-hdwallet v0.0.0-20191015012459-abf3d7f7f00c
 	github.com/prometheus/tsdb v0.7.1 // indirect
 	github.com/rivo/tview v0.0.0-20191129065140-82b05c9fb329
+	github.com/shopspring/decimal v0.0.0-20191130220710-360f2bc03045
 	github.com/spf13/cobra v0.0.5
 	gopkg.in/yaml.v2 v2.2.4 // indirect
 )
