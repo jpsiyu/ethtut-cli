@@ -10,4 +10,6 @@ geth \
   --mine \
   --minerthreads 1 \
   --etherbase 'a370bfe70687e3d2f17d4723d7d5bfec8806a63b' \
-  --shh --ws
+  --shh \
+  --ws \
+  --wsorigins="*"
